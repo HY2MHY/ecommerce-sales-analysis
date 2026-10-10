@@ -1,0 +1,22 @@
+{
+  "rows": 1036899,
+  "orders": 39527,
+  "customers": 5852,
+  "total_revenue": 20120171.276999995,
+  "uk_revenue_share": 0.8570486020520178,
+  "top_customer_share": 0.030259267757624077,
+  "top_10_customer_share": 0.13888854431345907,
+  "source_label": "REAL - UCI Online Retail II",
+  "leading_category": "Home Decor",
+  "leading_category_revenue": 6092219.07,
+  "leading_category_share": 0.3027916107734236,
+  "other_category_share": 0.12582482783802,
+  "peak_month": "2011-11",
+  "peak_month_revenue": 1457212.47,
+  "peak_month_orders": 2751,
+  "discount_signal_months": [
+    "2010-02",
+    "2010-05",
+    "2011-02"
+  ]
+}

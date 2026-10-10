@@ -1,0 +1,13 @@
+.DS_Store
+.venv/
+.matplotlib-cache/
+.jupyter-config/
+.jupyter-data/
+.jupyter-runtime/
+.ipython/
+__pycache__/
+*.py[cod]
+.pytest_cache/
+.ipynb_checkpoints/
+data/raw/*.xlsx
+data/processed/*.db
