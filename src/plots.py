@@ -11,7 +11,6 @@ from src.metrics import category_performance, customer_performance, monthly_perf
 
 BLUE = "#244b74"
 ORANGE = "#d97732"
-GRAY = "#6b7280"
 
 
 def _save(fig, path: Path):

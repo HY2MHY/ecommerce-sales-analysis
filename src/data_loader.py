@@ -103,12 +103,27 @@ def load_transactions(path: str | Path) -> pd.DataFrame:
 
 
 def synthetic_transactions() -> pd.DataFrame:
-    """Small deterministic fixture for smoke-testing the pipeline, never for findings."""
+    """A tiny input for checking that the pipeline runs without the workbook."""
     rows = [
-        ("S1001", "85123A", "WHITE HANGING HEART T-LIGHT HOLDER", 12, "2011-01-03", 2.95, 10001, "United Kingdom"),
-        ("S1002", "22720", "SET OF 3 CAKE TINS PANTRY DESIGN", 6, "2011-02-04", 4.95, 10002, "France"),
-        ("S1003", "22423", "REGENCY CAKESTAND 3 TIER", 4, "2011-03-05", 12.75, 10003, "United Kingdom"),
-        ("S1004", "47566", "PARTY BUNTING", 10, "2011-04-06", 4.65, 10004, "Germany"),
-        ("S1005", "84879", "ASSORTED COLOUR BIRD ORNAMENT", 8, "2011-05-07", 1.69, 10001, "United Kingdom"),
+        (
+            "S1001", "85123A", "WHITE HANGING HEART T-LIGHT HOLDER",
+            12, "2011-01-03", 2.95, 10001, "United Kingdom",
+        ),
+        (
+            "S1002", "22720", "SET OF 3 CAKE TINS PANTRY DESIGN",
+            6, "2011-02-04", 4.95, 10002, "France",
+        ),
+        (
+            "S1003", "22423", "REGENCY CAKESTAND 3 TIER",
+            4, "2011-03-05", 12.75, 10003, "United Kingdom",
+        ),
+        (
+            "S1004", "47566", "PARTY BUNTING",
+            10, "2011-04-06", 4.65, 10004, "Germany",
+        ),
+        (
+            "S1005", "84879", "ASSORTED COLOUR BIRD ORNAMENT",
+            8, "2011-05-07", 1.69, 10001, "United Kingdom",
+        ),
     ]
     return clean_transactions(pd.DataFrame(rows, columns=CANONICAL_COLUMNS))

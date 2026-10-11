@@ -11,6 +11,7 @@ def build_summary(frame, source_label: str):
     monthly = monthly_performance(frame)
 
     leader = categories.iloc[0]
+    runner_up = categories.iloc[1] if len(categories) > 1 else None
     other_rows = categories.loc[categories["Category"].eq("Other"), "revenue_share"]
     other_share = float(other_rows.iloc[0]) if len(other_rows) else 0.0
     peak = monthly.loc[monthly["revenue"].idxmax()]
@@ -22,11 +23,26 @@ def build_summary(frame, source_label: str):
     discount_signal_months = comparison.loc[
         comparison["order_change"].gt(0) & comparison["revenue_change"].le(0), "month"
     ].tolist()
-    signal_text = (
-        ", ".join(discount_signal_months)
-        if discount_signal_months
-        else "No month in the cleaned series"
+    if discount_signal_months:
+        signal_sentence = (
+            "Orders rose without revenue growth in "
+            + ", ".join(discount_signal_months)
+            + "."
+        )
+    else:
+        signal_sentence = "No month had more orders without revenue growth."
+    runner_up_text = (
+        f" {runner_up['Category']} follows at {_money(runner_up['revenue'])}."
+        if runner_up is not None
+        else ""
     )
+    if source_label.startswith("REAL"):
+        source_note = (
+            "The final month, December 2011, ends on the 9th. "
+            "These patterns come from one UK-based giftware retailer."
+        )
+    else:
+        source_note = "This sample only checks that the analysis runs."
 
     metrics = {
         **headline,
@@ -41,29 +57,26 @@ def build_summary(frame, source_label: str):
         "discount_signal_months": discount_signal_months,
     }
 
-    summary = f"""# Analysis summary
+    summary = f"""# Sales analysis
 
-**Data source:** {source_label}
+Source: **{source_label}**
 
-After excluding cancellations, returns, invalid prices or quantities, and non-merchandise charges, the analysis covers **{headline['rows']:,} line items**, **{headline['orders']:,} orders**, and **{headline['customers']:,} identified customers**. Cleaned merchandise revenue is **{_money(headline['total_revenue'])}**.
+I kept {headline['rows']:,} merchandise lines from {headline['orders']:,} orders, worth {_money(headline['total_revenue'])}. There are {headline['customers']:,} identified customers. The cleaning removes cancellations, returns, non-positive prices and quantities, and non-merchandise charges.
 
-## 1. Product mix
+## Products
 
-**{leader['Category']} leads the category view at {_money(leader['revenue'])}, or {leader['revenue_share']:.1%} of cleaned revenue.** The keyword mapping leaves {other_share:.1%} of revenue in `Other`; this is a practical portfolio taxonomy, not a source-system product hierarchy.
+{leader['Category']} brought in the most revenue: **{_money(leader['revenue'])} ({leader['revenue_share']:.1%})**.{runner_up_text} I assigned categories from product descriptions, and {other_share:.1%} of revenue remains in `Other`. These groups are useful for exploring the mix, but they are not an official product taxonomy.
 
-## 2. Geography and customer concentration
+## Customers and countries
 
-**The United Kingdom contributes {headline['uk_revenue_share']:.1%} of cleaned revenue.** The largest identified customer represents {headline['top_customer_share']:.1%}, while the top 10 represent {headline['top_10_customer_share']:.1%}. This separates the market's geographic concentration from its customer-level concentration.
+The UK accounts for **{headline['uk_revenue_share']:.1%}** of revenue. The largest identified customer accounts for {headline['top_customer_share']:.1%}; the top ten together account for {headline['top_10_customer_share']:.1%}. Orders without a customer ID remain in the revenue total but cannot appear in customer rankings.
 
-## 3. Seasonality
+## Timing
 
-**{peak['month']} is the strongest month, with {_money(peak['revenue'])} from {int(peak['orders']):,} orders.** Months where order count rose while revenue did not: {signal_text}. That pattern is only a discount or mix signal; the dataset has no promotion field, so it cannot establish the cause.
+Revenue peaks in **{peak['month']}**, at {_money(peak['revenue'])} from {int(peak['orders']):,} orders. {signal_sentence} Lower prices or a change in product mix could explain this, but the data has no promotion field. {source_note}
 
-## Scope and limitations
+## What the numbers mean
 
-- Revenue is gross merchandise value (`Quantity × UnitPrice`) after removing cancellations and returns; it is not profit and excludes shipping or fee lines.
-- Orders with missing customer IDs remain in revenue and order totals but not in customer concentration metrics.
-- Category labels are reproducible keyword rules over free-text descriptions. They are directional and should not be treated as a company-maintained taxonomy.
-- Online Retail II describes one UK-based non-store retailer from December 2009 to December 2011, so the findings do not generalize to e-commerce overall.
+Revenue is `Quantity × UnitPrice` on the retained lines, in pounds sterling. It is not profit. I would not generalize these patterns to other retailers.
 """
     return summary, metrics

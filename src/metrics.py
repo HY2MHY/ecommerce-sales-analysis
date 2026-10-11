@@ -1,18 +1,19 @@
-import re
-
 import pandas as pd
 
 
 CATEGORY_RULES = {
     "Kitchen & Dining": (
         r"\b(?:MUG|CUP|PLATE|BOWL|JAR|BOTTLE|GLASS|CUTLERY|SPOON|FORK|KNIFE|"
-        r"TEAPOT|TEACUP|SAUCER|TRAY|CAKE|CAKESTAND|BAKING|SNACK|JAM MAKING|TIN|NAPKIN|KITCHEN|TEA|COFFEE|LUNCH|COASTER|"
+        r"TEAPOT|TEACUP|SAUCER|TRAY|CAKE|CAKESTAND|BAKING|SNACK|JAM MAKING|"
+        r"TIN|NAPKIN|KITCHEN|TEA|COFFEE|LUNCH|COASTER|"
         r"CHOPPING|DISH|PLACEMAT|PANTRY|JUG|BAKE|BISCUIT|EGG|APRON)\b"
     ),
     "Home Decor": (
         r"\b(?:HEART|CANDLES?|FRAME|CLOCK|LANTERN|LIGHTS?|CUSHION|DOORMAT|MIRROR|"
         r"DECORATION|ORNAMENT|SIGN|CABINET|DRAWER|HANGER|HOOK|RUG|VASE|"
-        r"WALL|SHELF|HOLDER|BASKET|PHOTO|PICTURE|CURTAIN|DOOR|FLOWER|BLACK BOARD|MEMOBOARD|BUILDING BLOCK WORD|STORAGE CUBES|CHEST|COAT RACK|WARMER)\b"
+        r"WALL|SHELF|HOLDER|BASKET|PHOTO|PICTURE|CURTAIN|DOOR|FLOWER|"
+        r"BLACK BOARD|MEMOBOARD|BUILDING BLOCK WORD|STORAGE CUBES|CHEST|"
+        r"COAT RACK|WARMER)\b"
     ),
     "Party & Gift Wrap": (
         r"\b(?:GIFT|WRAP|RIBBON|PARTY|BUNTING|BIRTHDAY|CHRISTMAS|XMAS|EASTER|"
@@ -53,7 +54,8 @@ def add_categories(frame: pd.DataFrame) -> pd.DataFrame:
     )
     for category, pattern in CATEGORY_RULES.items():
         unmatched = result["Category"].eq("Other")
-        result.loc[unmatched & descriptions.str.contains(pattern, regex=True), "Category"] = category
+        matches = descriptions.str.contains(pattern, regex=True)
+        result.loc[unmatched & matches, "Category"] = category
     return result
 
 

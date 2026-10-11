@@ -36,7 +36,7 @@ These choices produce 1,036,899 merchandise lines from 1,067,371 source rows. A 
 
 The rules group description keywords into eight working categories: Home Decor, Kitchen & Dining, Party & Gift Wrap, Bags & Accessories, Toys & Stationery, Garden & Outdoor, Bath & Personal Care, and Crafts & Sewing. After reviewing the highest-revenue unmatched descriptions, the rules explicitly cover common source variants including `CAKESTAND`, `TEACUP`, `LIGHTS`, `MEMOBOARD`, `SNAP CARDS`, `JAM MAKING`, and `STORAGE CUBES`.
 
-The final `Other` share is 12.6% of cleaned revenue. That is acceptable for directional analysis, but the mapping remains a portfolio approximation. Similar products can be named inconsistently, and rule order matters when a description contains keywords from multiple categories.
+I checked the descriptions with the most revenue still in `Other` before adding those variants. The remaining `Other` share is 12.6%. It still matters: similar items have inconsistent names, and a description with words from two groups gets the first matching category.
 
 ## Known limitations
 
